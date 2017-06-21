@@ -9,7 +9,7 @@ class ChangeTest(unittest.TestCase):
 
     def setUp(self):
         self.fqdn = "fqdn.example.com"
-        self.ips = ["203.0.113.0.128"]
+        self.ip = ["203.0.113.0.128"]
 
     def testChange(self):
 
@@ -21,12 +21,12 @@ class ChangeTest(unittest.TestCase):
                     "TTL": 180,
                     "ResourceRecords": [
                         {
-                            "Value": self.ips
+                            "Value": self.ip
                         },
                     ],
                 }
             }
-        result = r53dydns.change(self.fqdn, self.ips)
+        result = r53dydns.change(self.fqdn, self.ip)
         self.assertEqual(expected, result)
 
 
