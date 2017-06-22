@@ -15,3 +15,10 @@ def change(fqdn, ip):
         }
     }
 
+def record_set(changes, comment='created by route53-dydns'):
+    return {
+        "Comment": comment,
+        "Changes": changes
+    }
+
+

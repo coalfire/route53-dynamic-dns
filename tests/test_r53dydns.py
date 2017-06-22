@@ -31,6 +31,8 @@ class ChangeTest(unittest.TestCase):
 
 class RecordSetTest(unittest.TestCase):
 
+    maxDiff = None
+
     def setUp(self):
         self.comment = "something to say about this record set"
         self.fqdn1 = "fqdn1.example.com"
@@ -47,7 +49,7 @@ class RecordSetTest(unittest.TestCase):
             "Comment": self.comment,
             "Changes": [ self.change1 ],
         }
-        result = r53dydns.record_set(self.change1, comment=self.comment)
+        result = r53dydns.record_set([self.change1], comment=self.comment)
         self.assertEqual(expected, result)
 
         
