@@ -52,6 +52,15 @@ class RecordSetTest(unittest.TestCase):
         result = r53dydns.record_set([self.change1], comment=self.comment)
         self.assertEqual(expected, result)
 
+    def testRecordSet2Changes(self):
+
+        expected= {
+            "Comment": self.comment,
+            "Changes": [ self.change1, self.change2 ],
+        }
+        result = r53dydns.record_set([self.change1, self.change2], comment=self.comment)
+        self.assertEqual(expected, result)
+
         
 if __name__ == '__main__':
     unittest.main()
