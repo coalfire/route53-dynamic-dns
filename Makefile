@@ -18,3 +18,10 @@ freeze_requirements:
 	@git add requirements.txt
 	@git commit -m 'freeze requirements' requirements.txt
 
+preview_readme: README.html
+	@$$BROWSER -new-window $<
+
+README.html: README.rst
+	@rst2html $< >$@
+
+.PHONY: test requirements freeze freeze_requirements preview_readme
