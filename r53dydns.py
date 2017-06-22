@@ -1,5 +1,7 @@
 import boto3
 
+client = boto3.client('route53')
+
 def change(fqdn, ip):
     return {
         "Action": "UPSERT",
@@ -15,10 +17,15 @@ def change(fqdn, ip):
         }
     }
 
-def record_set(changes, comment='created by route53-dydns'):
+def change_batch(changes, comment='created by route53-dydns'):
     return {
         "Comment": comment,
         "Changes": changes
     }
 
-
+def request_change_resource_record_set(zone, batch):
+    response = client.change_resource_record_sets(
+        HostedZoneId=zone,
+        ChangeBatch=batch
+        )
+    return response
