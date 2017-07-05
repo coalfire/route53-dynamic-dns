@@ -1,4 +1,5 @@
 import boto3
+import logging
 
 client = boto3.client('route53')
 
@@ -24,8 +25,26 @@ def change_batch(changes, comment='created by route53-dydns'):
     }
 
 def request_change_resource_record_set(zone, batch):
-    response = client.change_resource_record_sets(
-        HostedZoneId=zone,
-        ChangeBatch=batch
-        )
-    return response
+    try:
+        response = client.change_resource_record_sets(
+            HostedZoneId=zone,
+            ChangeBatch=batch
+            )
+        logging.info(response)
+        return response
+    except Exception as e:
+        logging.warn(e)
+
+
+def set_up_log(filename='/var/log/route53_dydns.log', level=logging.DEBUG):
+    logging.basicConfig(filename=filename,level=level)
+
+
+def main():        
+    set_up_log()
+    pass
+
+
+
+if __name__ == '__main__':
+    main()
