@@ -138,10 +138,6 @@ def main():
         )
 
     args = parser.parse_args()
-    numeric_level = getattr(logging, args.log_level.upper(), None)
-    if not isinstance(numeric_level, int):
-        raise ValueError('Invalid log level: %s' % args.log_level)
-
     set_up_log(filename=args.log_file, level=args.log_level)
 
     while True:
