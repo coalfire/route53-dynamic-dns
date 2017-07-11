@@ -10,3 +10,5 @@ data "aws_route53_zone" "lighthouse-sec" {
 output "example-com-zone-id" {
   value = "${aws_route53_zone.zone_id}"
 }
+
+FIXME add IAM role
