@@ -32,6 +32,7 @@ def change_batch(changes, comment='created by route53-dydns'):
     }
 
 def request_change_resource_record_set(zone, batch):
+    logging.info(zone + str(batch))
     try:
         response = client.change_resource_record_sets(
             HostedZoneId=zone,
@@ -42,10 +43,14 @@ def request_change_resource_record_set(zone, batch):
     except Exception as e:
         logging.error(e)
 
-def set_up_log(filename='/var/log/route53_dydns.log', level=logging.WARN):
-    logging.basicConfig(filename=filename,level=level)
+def set_up_log(filename='/var/log/route53_dydns.log', level='WARN'):
+    numeric_level = getattr(logging, level.upper(), None)
+    if not isinstance(numeric_level, int):
+        raise ValueError('Invalid log level: %s' % level)
 
-def read_fifo_and_request(fifo, zone, wait_time):
+    logging.basicConfig(filename=filename,level=numeric_level)
+
+def read_fifo_and_request(fifo, zone, domain, wait_time):
     changes = []
     begin_time = datetime.datetime.now()
     with open(fifo) as pipeline:
@@ -59,7 +64,8 @@ def read_fifo_and_request(fifo, zone, wait_time):
             except Exception as e:
                 logging.error(e)
 
-            record_change = change(hostname, ip)
+            fqdn = hostname + domain
+            record_change = change(fqdn, ip)
             changes.append(record_change)
 
     delta =  datetime.datetime.now() - begin_time 
@@ -125,17 +131,21 @@ def main():
         '-w',
         '--wait-time',
         help='wait TIME seconds between posting records to route53',
+        type=int,
         default=1,
         action='store',
         dest='wait_time',
         )
 
     args = parser.parse_args()
+    numeric_level = getattr(logging, args.log_level.upper(), None)
+    if not isinstance(numeric_level, int):
+        raise ValueError('Invalid log level: %s' % args.log_level)
 
-    set_up_log(filename=args.log_file)
+    set_up_log(filename=args.log_file, level=args.log_level)
 
     while True:
-        read_fifo_and_request(args.fifo, args.zone, args.wait_time)
+        read_fifo_and_request(args.fifo, args.zone, args.domain, args.wait_time)
 
 if __name__ == '__main__':
     main()
