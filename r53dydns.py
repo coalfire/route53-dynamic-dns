@@ -61,12 +61,12 @@ def read_fifo_and_request(fifo, zone, domain, wait_time):
 
             try:
                 hostname, ip = data.split(',')
+                fqdn = hostname + domain
+                record_change = change(fqdn, ip)
+                changes.append(record_change)
+
             except Exception as e:
                 logging.error(e)
-
-            fqdn = hostname + domain
-            record_change = change(fqdn, ip)
-            changes.append(record_change)
 
     delta =  datetime.datetime.now() - begin_time 
     if delta.seconds > wait_time:
