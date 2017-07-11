@@ -1,0 +1,15 @@
+
+module vpnconn_local 1.0;
+
+require {
+        type openvpn_t;
+        type openvpn_var_run_t;
+        class fifo_file open;
+        class fifo_file append;
+}
+
+#============= openvpn_t ==============
+
+#!!!! This avc is allowed in the current policy
+allow openvpn_t openvpn_var_run_t:fifo_file open;
+allow openvpn_t openvpn_var_run_t:fifo_file append;
