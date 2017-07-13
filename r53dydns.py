@@ -50,12 +50,6 @@ def set_up_log(filename='/var/log/route53_dydns.log', level='WARN'):
 
     logging.basicConfig(filename=filename,level=numeric_level)
 
-def set_up_fifo(filename='/var/run/r53dydns.fifo'):
-    try:
-        os.mkfifo(filename, mode=664)
-    except FileExistsError:
-        pass
-
 def read_fifo_and_request(fifo, zone, domain, wait_time):
     changes = []
     begin_time = datetime.datetime.now()
@@ -145,7 +139,6 @@ def main():
 
     args = parser.parse_args()
     set_up_log(filename=args.log_file, level=args.log_level)
-    set_up_fifo(filename=args.fifo)
 
     while True:
         read_fifo_and_request(args.fifo, args.zone, args.domain, args.wait_time)
