@@ -17,6 +17,16 @@ openvpn-service:
     - enable: True
     - require:
       - pkg: openvpn-package
+      - file: custom-openvpn-service-file
+
+custom-openvpn-service-file:
+  file.managed:
+    - source:
+      - salt://packages/openvpn/files/openvpn.service
+    - name: /etc/systemd/system/openvpn@.service
+    - user: root
+    - group: root
+    - mode: 640
 
 ip-forwarding:
   sysctl.present:
