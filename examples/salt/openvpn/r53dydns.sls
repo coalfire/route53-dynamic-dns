@@ -1,3 +1,13 @@
+openvpn-server-pre-exec-script:
+  file.managed:
+    - source: 
+      - salt://packages/openvpn/files/on-vpnserver-pre.sh
+    - name: /usr/local/bin/on-vpnserver-pre
+    - makedirs: True
+    - user: nobody
+    - group: nobody
+    - mode: 755
+
 openvpn-server-client-connect-script:
   file.managed:
     - source: 
