@@ -1,3 +1,12 @@
+# salt won't call pip3 properly unless pip2 is also installed.
+# Apparently SaltStack says this is expected behavior.
+# https://github.com/saltstack/salt/issues/40048
+
+python2_pip_package:
+  pkg:
+    - installed
+    - name: python2-pip
+
 python34_pip_package:
   pkg:
     - installed
