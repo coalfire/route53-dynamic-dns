@@ -19,6 +19,7 @@ TODO
 * Drop privileges.
 * pip package
 * documentation
+* timestamp logs
 
 License
 -------
