@@ -60,6 +60,7 @@ def read_fifo_and_request(fifo, zone, domain, wait_time):
                 break
 
             try:
+                data = data.rstrip()
                 hostname, ip = data.split(',')
                 fqdn = hostname + domain
                 record_change = change(fqdn, ip)
