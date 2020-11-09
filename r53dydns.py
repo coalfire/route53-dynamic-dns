@@ -146,6 +146,7 @@ def main():
 
     args = parser.parse_args()
     set_up_log(filename=args.log_file, level=args.log_level)
+    logging.info(args)
 
     while True:
         read_fifo_and_request(args.fifo, args.zone, args.domain, args.wait_time)
