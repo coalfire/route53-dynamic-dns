@@ -48,7 +48,13 @@ def set_up_log(filename='/var/log/route53_dydns.log', level='WARN'):
     if not isinstance(numeric_level, int):
         raise ValueError('Invalid log level: %s' % level)
 
-    logging.basicConfig(filename=filename,level=numeric_level)
+    logging.basicConfig(
+        filename=filename,
+        format='%(asctime)s %(levelname)-8s %(message)s',
+        level=numeric_level,
+        datefmt='%Y%m%dT%H:%M:%S'
+    )
+
 
 def read_fifo_and_request(fifo, zone, domain, wait_time):
     changes = []
