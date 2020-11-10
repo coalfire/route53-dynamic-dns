@@ -10,13 +10,13 @@ import configargparse
 
 client = boto3.client('route53')
 
-def change(fqdn, ip):
+def change(fqdn, ip, ttl):
     return {
         "Action": "UPSERT",
         "ResourceRecordSet": {
             "Name": fqdn,
             "Type": "A",
-            "TTL": 180,
+            "TTL": ttl,
             "ResourceRecords": [
                 {
                     "Value": ip
@@ -56,7 +56,7 @@ def set_up_log(filename='/var/log/route53_dydns.log', level='WARN'):
     )
 
 
-def read_fifo_and_request(fifo, zone, domain, wait_time):
+def read_fifo_and_request(fifo, zone, domain, wait_time, ttl):
     changes = []
     begin_time = datetime.datetime.now()
     with open(fifo) as pipeline:
@@ -69,7 +69,7 @@ def read_fifo_and_request(fifo, zone, domain, wait_time):
                 data = data.rstrip()
                 hostname, ip = data.split(',')
                 fqdn = hostname + domain
-                record_change = change(fqdn, ip)
+                record_change = change(fqdn, ip, ttl)
                 changes.append(record_change)
 
             except Exception as e:
@@ -119,6 +119,14 @@ def main():
         dest='fifo',
         )
     parser.add_argument(
+        '-t',
+        '--ttl',
+        help='TTL for records',
+        default=180,
+        action='store',
+        dest='ttl',
+        )
+    parser.add_argument(
         '-d',
         '--domain',
         help='append domain DOMAIN to incoming hostnames, eg: example.com',
@@ -149,7 +157,7 @@ def main():
     logging.info(args)
 
     while True:
-        read_fifo_and_request(args.fifo, args.zone, args.domain, args.wait_time)
+        read_fifo_and_request(args.fifo, args.zone, args.domain, args.wait_time, args.ttl)
 
 if __name__ == '__main__':
     main()
