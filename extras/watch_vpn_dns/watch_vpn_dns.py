@@ -31,7 +31,7 @@ def set_up_log(filename="/var/log/watch_vpn_dns.log", level="WARN"):
 def _get_status_lines(status_files):
     """
     Accept status files (list of file-like objects),
-    Return generator of lines startign with "CLIENT_LIST,"
+    Return generator of lines starting with "CLIENT_LIST,"
     """
     for status_file in status_files:
         with open(status_file) as fileh:
