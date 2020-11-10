@@ -124,6 +124,7 @@ def main():
         help='TTL for records',
         default=180,
         action='store',
+        type=int,
         dest='ttl',
         )
     parser.add_argument(
