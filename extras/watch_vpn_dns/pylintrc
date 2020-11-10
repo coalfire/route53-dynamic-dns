@@ -1,0 +1,8 @@
+
+[MESSAGES CONTROL]
+
+disable=missing-module-docstring,
+        logging-format-interpolation,
+        logging-fstring-interpolation,
+        logging-not-lazy,
+        invalid-name,
