@@ -8,22 +8,23 @@ from dns.resolver import query
 import dns
 import configargparse
 
-Status = namedtuple('Status', ['name', 'ip'])
+Status = namedtuple("Status", ["name", "ip"])
 
-def set_up_log(filename='/var/log/watch_vpn_dns.log', level='WARN'):
+
+def set_up_log(filename="/var/log/watch_vpn_dns.log", level="WARN"):
     """
     Accept optional filename, level.
     Create a logger.
     """
     numeric_level = getattr(logging, level.upper(), None)
     if not isinstance(numeric_level, int):
-        raise ValueError('Invalid log level: %s' % level)
+        raise ValueError("Invalid log level: %s" % level)
 
     logging.basicConfig(
         filename=filename,
-        format='%(asctime)s %(levelname)-8s %(message)s',
+        format="%(asctime)s %(levelname)-8s %(message)s",
         level=numeric_level,
-        datefmt='%Y%m%dT%H:%M:%S',
+        datefmt="%Y%m%dT%H:%M:%S",
     )
 
 
@@ -86,10 +87,7 @@ def ips_from_dns(names, domain):
     domain (str).
     Return dict of common_name: ip.
     """
-    return {
-        name: dig_record(name, domain)
-        for name in names
-    }
+    return {name: dig_record(name, domain) for name in names}
 
 
 def diff(what_should_be, what_is):
@@ -113,7 +111,7 @@ def send_to_pipe(fifo, to_update):
     Return True on success,
     otherwise raise Exception.
     """
-    logging.info('Updating: ' + str(to_update))
+    logging.info("Updating: " + str(to_update))
     with open(fifo, "w") as pipe:
         for name, ip in to_update.items():
             pipe.write(name + "," + ip + "\n")
